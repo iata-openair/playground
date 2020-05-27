@@ -9,145 +9,273 @@
       "url": "http://localhost:3000"
     }
   ],
-  "paths": {},
-  "components": {
-
-  "schemas": {
-
-    "Carrier": {
-	  "type": "object",
-	  "properties": {
-	    "airlineAccountingCode": {
-		  "type": "string"
-		},
-		"airlineDesignatorCode": {
-		  "type": "string"
-		},
-		"duplicateDesignatorIndicator" {
-		  "type": "string"
-		},
-        "iataNumber": {
-		  "type": "string"
-		},
-        "name": {
-		  "type": "string"
-		},
-        "volumeUnitCode": {
-		  "type": "string"
-		},
-        "weightUnitCode": {
-		  "type": "string"
-		}
-        "administratedFlights": {
-		  "type": "array",
-		  "items": { "$ref": "#/components/schemas/DatedOperatingFlight"}
-		}
-	  },
-	  "required": ["airlineAccountingCode"]
-	}
-
-    "DatedOperatingFlight": {
-	  "type": "object",
-	  "properties": {
-	    "administratingCarrierFlightNumberText": {
-		  "type": ""string""
-		},
-		"flightIdentifierDate": {
-		  "type": ""string""
-		},
-		"operationalSuffixText" {
-		  "type": ""string""
-		},
-        "legs": {
-		  "type": "array",
-		  "items": { "$ref": "#/components/schemas/DatedOperatingLeg"}
-		},
-        "administratingCarrier": {
-		  "$ref": "#/components/schemas/Carrier"
-		}
-	  },
-	  "required": ["administratingCarrier","legs"]
-	},
-    "DatedOperatingLeg": {
-      "type": "object",
-      "properties": {
-        "changeOfGaugeIndicator": {
-		  "type": "boolean"
-		},
-	    "datedOperatingLegIdentifier": {
-		  "type": "string"
-		},
-	    "distanceMeasure": {
-		  "type": "string"
-		},
-	    "onGroundDuration": {
-		  "type": "string"
-		},
-	    "arrival": {
-		  "$ref": "#/components/schemas/TransportArrival"
-		},
-        "departure": {
-		  "$ref": "#/components/schemas/TransportDeparture"
-		},
-		"flight": {
-		  "$ref": "#/components/schemas/DatedOperatingFlight"
-		}
-	  },
-	  "required": ["arrival","departure","flight"]
+  "paths": {
+    "/datedOperatingLegs/{id}": {
+      "get": {
+        "tags": [],
+        "summary": "get datedOperatingLegs",
+        "operationId": "get-datedOperatingLegs",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id of the datedOperatingLeg",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DatedOperatingLeg"
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    "Station": {
-	  "type": "object",
-	  "properties": {
-	    "iataLocationCode": {
-		  "type": "string"
-		},
-		"stationName": {
-		  "type": "string"
-		},
-		"arrivals": {
-		  "type": "array",
-		  "items": { "$ref": "#/components/schemas/TransportArrival"}
-		},
-		"departures": {
-		  "type": "array",
-		  "items": { "$ref": "#/components/schemas/TransportArrival"}
-		}
-	  },
-	  "required": []
-	}	
-
-    "TransportArrival": {
-	  "type": "object",
-	  "properties": {
-	    "aircraftScheduledDateTime": {
-		  "type": "string"
-		},
-		"station": {
-		  "$ref": "#/components/schemas/Station"
-		},
-		"leg": {
-		  "$ref": "#/components/schemas/DatedOperatingLeg"
-		}
-	  },
-	  "required": ["leg"]
-	},
-	
-    "TransportDeparture": {
-	  "type": "object",
-	  "properties": {
-	    "aircraftScheduledDateTime": {
-		  "type": "string"
-		},
-		"station": {
-		  "$ref": "#/components/schemas/Station"
-		},
-		"leg": {
-		  "$ref": "#/components/schemas/DatedOperatingLeg"
-		}
-	  },
-	  "required": ["leg"]
-	}
-
+    "/station/{id}/arrivals": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "iata location code for the station"
+        }
+      ],
+      "get": {
+        "summary": "get all arrival flights for the station",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DatedOperatingLeg"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-station-id-arrivals",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2020-05-27T00:00:00Z"
+            },
+            "in": "query",
+            "name": "startTime",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2020-05-27T00:00:00Z"
+            },
+            "in": "query",
+            "name": "endTime",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/station/{id}/departures": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "get departure flights for the station",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DatedOperatingLeg"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-station-id-departures"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Carrier": {
+        "required": [
+          "airlineAccountingCode"
+        ],
+        "type": "object",
+        "properties": {
+          "airlineAccountingCode": {
+            "type": "string"
+          },
+          "airlineDesignatorCode": {
+            "type": "string"
+          },
+          "duplicateDesignatorIndicator": {
+            "type": "string"
+          },
+          "iataNumber": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "volumeUnitCode": {
+            "type": "string"
+          },
+          "weightUnitCode": {
+            "type": "string"
+          },
+          "administratedFlights": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DatedOperatingFlight"
+            }
+          }
+        }
+      },
+      "DatedOperatingFlight": {
+        "required": [
+          "administratingCarrier",
+          "legs"
+        ],
+        "type": "object",
+        "properties": {
+          "administratingCarrierFlightNumberText": {
+            "type": "string"
+          },
+          "flightIdentifierDate": {
+            "type": "string"
+          },
+          "operationalSuffixText": {
+            "type": "string"
+          },
+          "legs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DatedOperatingLeg"
+            }
+          },
+          "administratingCarrier": {
+            "$ref": "#/components/schemas/Carrier"
+          }
+        }
+      },
+      "DatedOperatingLeg": {
+        "required": [
+          "arrival",
+          "departure",
+          "flight"
+        ],
+        "type": "object",
+        "properties": {
+          "changeOfGaugeIndicator": {
+            "type": "boolean"
+          },
+          "datedOperatingLegIdentifier": {
+            "type": "string"
+          },
+          "distanceMeasure": {
+            "type": "string"
+          },
+          "onGroundDuration": {
+            "type": "string"
+          },
+          "arrival": {
+            "$ref": "#/components/schemas/TransportArrival"
+          },
+          "departure": {
+            "$ref": "#/components/schemas/TransportDeparture"
+          },
+          "flight": {
+            "$ref": "#/components/schemas/DatedOperatingFlight"
+          }
+        }
+      },
+      "Station": {
+        "type": "object",
+        "properties": {
+          "iataLocationCode": {
+            "type": "string"
+          },
+          "stationName": {
+            "type": "string"
+          },
+          "arrivals": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TransportArrival"
+            }
+          },
+          "departures": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TransportArrival"
+            }
+          }
+        }
+      },
+      "TransportArrival": {
+        "required": [
+          "leg"
+        ],
+        "type": "object",
+        "properties": {
+          "aircraftScheduledDateTime": {
+            "type": "string"
+          },
+          "station": {
+            "$ref": "#/components/schemas/Station"
+          },
+          "leg": {
+            "$ref": "#/components/schemas/DatedOperatingLeg"
+          }
+        }
+      },
+      "TransportDeparture": {
+        "required": [
+          "leg"
+        ],
+        "type": "object",
+        "properties": {
+          "aircraftScheduledDateTime": {
+            "type": "string"
+          },
+          "station": {
+            "$ref": "#/components/schemas/Station"
+          },
+          "leg": {
+            "$ref": "#/components/schemas/DatedOperatingLeg"
+          }
+        }
+      }
+    }
   }
-}
 }
