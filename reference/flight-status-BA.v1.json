@@ -114,13 +114,43 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "https://iata.stoplight-dev.com/api/nodes.raw/?srn=gh/iata-openair/playground/reference/flight-status-BA.v1.json/components/schemas/Station"
+                  "$ref": "https://iata.stoplight-dev.com/api/nodes.raw/?srn=gh/iata-openair/playground/reference/flight-status-BA.v1.json/components/schemas/Station&mid=12&deref=bundle"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "iataLocationCode": "NCL",
+                      "stationName": "Newcastle",
+                      "departures": [
+                        {
+                          "aircraftScheduledDateTime": "2020-05-27T07:00:00Z",
+                          "leg": {
+                            "flight": {
+                              "administratingCarrierFlightNumberText": "8642",
+                              "operationalSuffixText": null,
+                              "administratingCarrier": {
+                                "airlineDesignatorCode": "BA",
+                                "name": "British Airways"
+                              }
+                            },
+                            "arrival": {
+                              "station": {
+                                "iataLocationCode": "LHR",
+                                "stationName": "London Heathrow"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
                 }
               }
             }
           }
         },
-        "operationId": "get-station-id-departures"
+        "operationId": "get-station-id-departures",
+        "description": ""
       }
     }
   },
