@@ -114,7 +114,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "https://iata.stoplight-dev.com/api/nodes.raw/?srn=gh/iata-openair/playground/reference/flight-status-BA.v1.json/components/schemas/Station&mid=12&deref=bundle"
+                  "$ref": "#/components/schemas/Station"
                 },
                 "examples": {
                   "example-1": {
