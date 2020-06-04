@@ -1,0 +1,474 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "AIDM Core Model - Passenger Flight",
+    "description": "AIDM Core Model extracted from Governance view for Passenger Flight domain in 20.1 release.",
+    "version": "20.1"
+  },
+  "components": {
+    "schemas": {
+      "airlineDesigCode": {
+        "type": "string",
+        "pattern": "^([A-Z]{3}|[A-Z]{2})|([0-9][A-Z])|([A-Z][0-9])$"
+      },
+      "iataAircraftTypeCode": {
+        "type": "string",
+        "pattern": "^[0-9A-Z]{3}$"
+      },
+      "iataLocationCode": {
+        "type": "string"
+      },
+      "rbdCode": {
+        "type": "string"
+      },
+      "segmentTypeCode": {
+        "type": "string"
+      },
+      "boardingGate": {
+        "type": "object",
+        "properties": {}
+      },
+      "cabinType": {
+        "type": "object",
+        "properties": {}
+      },
+      "carrier": {
+        "type": "object",
+        "properties": {
+          "airlineDesigCode": {
+            "properties": {
+              "Value": {
+                "$ref": "#/components/schemas/airlineDesigCode"
+              },
+              "listSchemeUniformResource.Identifier": {
+                "type": "string",
+                "format": "uri"
+              },
+              "listUniformResource.Identifier": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          },
+          "duplicateDesigInd": {
+            "type": "boolean"
+          },
+          "carrierAircraftType": {
+            "type": "array",
+            "minItems": 0,
+            "items": {
+              "$ref": "#/components/schemas/carrierAircraftType"
+            }
+          }
+        }
+      },
+      "carrierAircraftType": {
+        "type": "object",
+        "properties": {}
+      },
+      "datedMarketingSegment": {
+        "type": "object",
+        "required": [
+          "datedOperatingSegment",
+          "marketingCarrier"
+        ],
+        "properties": {
+          "ticketlessInd": {
+            "type": "boolean"
+          },
+          "datedOperatingSegment": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/datedOperatingSegment"
+            }
+          },
+          "marketingCarrier": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/carrier"
+            }
+          }
+        }
+      },
+      "datedOperatingLeg": {
+        "type": "object",
+        "required": [
+          "transportArrival",
+          "transportDep"
+        ],
+        "properties": {
+          "changeOfGaugeInd": {
+            "type": "boolean"
+          },
+          "distanceMeasure": {
+            "type": "number"
+          },
+          "onGroundDuration": {
+            "type": "string",
+            "format": "duration"
+          },
+          "carrierAircraftType": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/carrierAircraftType"
+            }
+          },
+          "iataAircraftType": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/iataAircraftType"
+            }
+          },
+          "transportArrival": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/transportArrival"
+            }
+          },
+          "transportDep": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/transportDep"
+            }
+          }
+        }
+      },
+      "datedOperatingSegment": {
+        "type": "object",
+        "required": [
+          "datedOperatingLeg",
+          "operatingCarrier"
+        ],
+        "properties": {
+          "duration": {
+            "type": "string",
+            "format": "duration"
+          },
+          "secureFlightInd": {
+            "type": "boolean"
+          },
+          "segmentTypeCode": {
+            "properties": {
+              "Value": {
+                "$ref": "#/components/schemas/segmentTypeCode"
+              },
+              "listSchemeUniformResource.Identifier": {
+                "type": "string",
+                "format": "uri"
+              },
+              "listUniformResource.Identifier": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          },
+          "datedOperatingLeg": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/datedOperatingLeg"
+            }
+          },
+          "operatingCarrier": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/carrier"
+            }
+          }
+        }
+      },
+      "iataAircraftType": {
+        "type": "object",
+        "properties": {
+          "iataAircraftTypeCode": {
+            "properties": {
+              "Value": {
+                "$ref": "#/components/schemas/iataAircraftTypeCode"
+              },
+              "listSchemeUniformResource.Identifier": {
+                "type": "string",
+                "format": "uri"
+              },
+              "listUniformResource.Identifier": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          }
+        }
+      },
+      "originDest": {
+        "type": "object",
+        "required": [
+          "destStation",
+          "originStation"
+        ],
+        "properties": {
+          "destStation": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/station"
+            }
+          },
+          "originStation": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/station"
+            }
+          },
+          "paxJourney": {
+            "type": "array",
+            "minItems": 0,
+            "items": {
+              "$ref": "#/components/schemas/paxJourney"
+            }
+          }
+        }
+      },
+      "paxJourney": {
+        "type": "object",
+        "required": [
+          "paxSegment"
+        ],
+        "properties": {
+          "duration": {
+            "type": "string",
+            "format": "duration"
+          },
+          "paxSegment": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/paxSegment"
+            }
+          }
+        }
+      },
+      "paxLeg": {
+        "type": "object",
+        "required": [
+          "datedOperatingLeg"
+        ],
+        "properties": {
+          "datedOperatingLeg": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/datedOperatingLeg"
+            }
+          }
+        }
+      },
+      "paxSegment": {
+        "type": "object",
+        "required": [
+          "datedMarketingSegment",
+          "paxLeg"
+        ],
+        "properties": {
+          "arnkInd": {
+            "type": "boolean"
+          },
+          "marketingCarrierRbdCode": {
+            "properties": {
+              "Value": {
+                "$ref": "#/components/schemas/rbdCode"
+              },
+              "listSchemeUniformResource.Identifier": {
+                "type": "string",
+                "format": "uri"
+              },
+              "listUniformResource.Identifier": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          },
+          "operatingCarrierRbdCode": {
+            "properties": {
+              "Value": {
+                "$ref": "#/components/schemas/rbdCode"
+              },
+              "listSchemeUniformResource.Identifier": {
+                "type": "string",
+                "format": "uri"
+              },
+              "listUniformResource.Identifier": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          },
+          "cabinType": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/cabinType"
+            }
+          },
+          "datedMarketingSegment": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/datedMarketingSegment"
+            }
+          },
+          "marketingCarrierRbd": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/rbd"
+            }
+          },
+          "operatingCarrierRbd": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/rbd"
+            }
+          },
+          "paxLeg": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/paxLeg"
+            }
+          }
+        }
+      },
+      "rbd": {
+        "type": "object",
+        "properties": {
+          "rbdCode": {
+            "properties": {
+              "Value": {
+                "$ref": "#/components/schemas/rbdCode"
+              },
+              "listSchemeUniformResource.Identifier": {
+                "type": "string",
+                "format": "uri"
+              },
+              "listUniformResource.Identifier": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          }
+        }
+      },
+      "station": {
+        "type": "object",
+        "properties": {
+          "iataLocationCode": {
+            "properties": {
+              "Value": {
+                "$ref": "#/components/schemas/iataLocationCode"
+              },
+              "listSchemeUniformResource.Identifier": {
+                "type": "string",
+                "format": "uri"
+              },
+              "listUniformResource.Identifier": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          }
+        }
+      },
+      "terminal": {
+        "type": "object",
+        "properties": {}
+      },
+      "transportArrival": {
+        "type": "object",
+        "properties": {
+          "aircraftScheduledDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "boardingGate": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/boardingGate"
+            }
+          },
+          "station": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/station"
+            }
+          },
+          "terminal": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/terminal"
+            }
+          }
+        }
+      },
+      "transportDep": {
+        "type": "object",
+        "properties": {
+          "aircraftScheduledDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "boardingGate": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/boardingGate"
+            }
+          },
+          "station": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/station"
+            }
+          },
+          "terminal": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/terminal"
+            }
+          }
+        }
+      }
+    }
+  }
+}
